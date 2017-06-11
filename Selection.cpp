@@ -14,7 +14,7 @@ void Selection (Windows& win) {
 	int para[6] = {};
 	int i = 0;
 	char t_char = 0;
-	/*------------------------------------------------------------------------*/
+	/*--------------------------------------------------------------------*/
 
 	/*--------------------------------------------------------------------*/
 	cout << "choose one option , input the number in front of it. \n"
@@ -29,7 +29,6 @@ void Selection (Windows& win) {
 
 	if (operation == 5) {
 		helpk();
-		//cout << "help" << endl;
 		system("pause");
 		return;
 	}
@@ -38,16 +37,24 @@ void Selection (Windows& win) {
 		return;
 	}
 	if (operation == 7) {
+		win.SaveAll();
+		win.DeleteAll();
 		exit(0);
 	}
 	if (operation == 4) {
-		cout << "choose one graph \n";
+		cout << "choose one graph \n input 0 to delete all \n";
 		win.PrintEle();
 		if (win.size() == 0) {
 			return;
 		}
 		cin >> shape;
-		win[i]->remove(win);
+		if (shape == 0) {
+			win.DeleteAll();
+			return;
+		}
+		win[shape-1]->remove(win);
+		win.Out();
+		win.DrawAll();
 		return;
 	}
 	if (operation == 2) {
@@ -66,7 +73,7 @@ void Selection (Windows& win) {
 			cin >> t_char;
 			i++;
 		}
-		win[shape]->Move(para[0],para[1],win);
+		win[shape-1]->Move(para[0],para[1],win);
 		win.Out();
 		win.DrawAll();
 		return;
@@ -87,7 +94,7 @@ void Selection (Windows& win) {
 			cin >> t_char;
 			i++;
 		}
-		win[shape]->Set(para, win);
+		win[shape-1]->Set(para, win);
 		win.Out();
 		win.DrawAll();
 		return;

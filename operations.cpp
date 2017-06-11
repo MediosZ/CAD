@@ -28,7 +28,7 @@ void Do(Windows& win){
 	int para[6] = {};
 	int i = 0;
 	char t_char = 0;
-	/*------------------------------------------------------------------------*/
+	/*--------------------------------------------------------------------*/
 
 	/*--------------------------------------------------------------------*/
 	cin >> operation;
@@ -39,9 +39,12 @@ void Do(Windows& win){
 	}
 	if (operation == "show"){
 		win.PrintEle();
+		system("pause");
 		return;
 	}
 	if (operation == "exit"){
+		win.SaveAll();
+		win.DeleteAll();
 		exit(0);
 	}
 
@@ -61,7 +64,7 @@ void Do(Windows& win){
 	}
 	/*---------------------------------------------------------------------*/
 
-	/*-----------------------------------------------------------------------*/
+	/*---------------------------------------------------------------------*/
 	if (operation == "create"){
 		if (shape == "rectangle"){
 			Graph* r = new Rectangle(name, para[2], para[3], para[0], para[1]);
@@ -133,6 +136,7 @@ void Do(Windows& win){
 					win[i]->Set(para, win);
 				}
 			}
+
 		} else if (shape == "line")  {
 			for (int i = 0; i < win.size(); i++) {
 				if (win[i]->GetId() == name && win[i]->GetFlag() == 4) {
@@ -179,6 +183,8 @@ void Do(Windows& win){
 					win[i]->remove(win);
 				}
 			}
+		} else if (shape == "all") {
+			win.DeleteAll();
 		} else {
 			cout << "Wrong shape !\n";
 			system("pause");

@@ -5,6 +5,7 @@
 #include<vector>
 #include<string>
 #include<vector>
+#include<fstream>
 #include<opencv2/opencv.hpp>
 #include<core.hpp>
 
@@ -18,6 +19,7 @@ class Windows;
 void triangle(Mat image, Point_set point, Scalar sca);
 
 class mPoint {
+	friend ostream& operator << (ostream& os, const mPoint& m);
 	friend class Rectangle;
 	friend class Triangle;
 	friend class Circle;
@@ -38,6 +40,7 @@ public:
 		_y = point._y;
 		return *this;
 	}
+
 	operator Point() const {
 		return Point(_x, _y);
 	}
@@ -45,6 +48,8 @@ public:
 private:
 	int _x, _y;
 };
+
+
 
 struct Point_set {
 	Point_set(mPoint point_1, mPoint point_2, mPoint point_3 = mPoint(0, 0)) :point1(point_1), point2(point_2), point3(point_3) {}
@@ -69,6 +74,7 @@ public:
 	virtual void MarkAsRed(Windows& win)=0;
 	virtual void remove(Windows& win) = 0;
 	virtual void Set(int para[], Windows& win) =0;
+	virtual void Save(Windows& win, ostream& os) = 0;
 	string GetShape();
 
 protected:
@@ -86,12 +92,14 @@ public:
 	void push_back(Graph* p_gra) { root.push_back(p_gra); }
 	int size() { return (int)root.size(); }
 	Graph* operator[] (int i) { return root[i]; }
-	void remove(int i) { root.erase(root.begin() + i); }
+	void remove(int i) { delete *(root.begin() + i); root.erase(root.begin() + i); }
 	void move(int i, int x, int y) { root[i]->Move(x, y, *this); }
 	void PrintEle();
 	void PrintElements();
 	void DrawAll(); 
 	void Out();
+	void SaveAll();
+	void DeleteAll();
 
 private:
 	vector<Graph*> root;
@@ -111,6 +119,7 @@ public:
 	void Set(int para[], Windows& win);
 	bool IsOut();
 	void MarkAsRed(Windows& win);
+	void Save(Windows& win, ostream& os);
 
 private:
 	int _width, _height;
@@ -128,6 +137,7 @@ public:
 	void Refresh();
 	bool IsOut();
 	void Set(int para[], Windows& win);
+	void Save(Windows& win, ostream& os);
 	void MarkAsRed(Windows& win);
 
 private:
@@ -146,6 +156,7 @@ public:
 	void Set(int para[], Windows& win);
 	void Draw(Windows& win) { circle(win.src_image, GetPoint(), GetRadius(), Scalar(0, 0, 0)); }
 	bool IsOut();
+	void Save(Windows& win, ostream& os);
 	void MarkAsRed(Windows& win);
 private:
 	int _radius;
@@ -161,6 +172,7 @@ public:
 	void Set(int para[], Windows& win);
 	void Draw(Windows& win) { line(win.src_image, GetPoint().point1, GetPoint().point2, Scalar(0, 0, 0)); }
 	bool IsOut();
+	void Save(Windows& win, ostream& os);
 	void MarkAsRed(Windows& win);
 private:
 	mPoint point_1;

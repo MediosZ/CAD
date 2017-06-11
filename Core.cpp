@@ -173,7 +173,25 @@ void Line::MarkAsRed(Windows& win) {
 }
 /*----------------------------------------------------------------------------------------------------*/
 
-/*------------------Useful functions----------------------------------------------------------------*/
+/*---------------------------Save function-----------------------------------------------------------*/
+void Rectangle::Save(Windows& win, ostream& os) {
+	os << flag << " " << id << " [" << main_point._x << "," << main_point._y << "," << _height << "," << _width << "]" << endl;
+}
+
+void Triangle::Save(Windows& win, ostream& os) {
+	os << flag << " " << id << " [" << main_point << " " << point_1 << " " << point_2 << "]" << endl;
+}
+
+void Circle::Save(Windows& win, ostream& os) {
+	os << flag << " " << id << " [" << main_point << " " << _radius << "]" << endl;
+}
+
+void Line::Save(Windows& win, ostream& os) {
+	os << flag << " " << id << " [" << main_point << " " << point_1 << "]" << endl;
+}
+/*----------------------------------------------------------------------------------------------------*/
+
+/*------------------Useful functions------------------------------------------------------------------*/
 string Graph::GetShape(){
 	switch (flag){
 	case 1:return "rectangle"; break;
@@ -192,7 +210,7 @@ void Windows::PrintEle(){
 		return;
 	}
 	for (int i = 0; i < root.size(); i++)
-		cout <<i<<". "<< root[i]->GetShape() << " " << root[i]->GetId() << endl;
+		cout <<i+1<<". "<< root[i]->GetShape() << " " << root[i]->GetId() << endl;
 }
 void Windows::PrintElements() {
 	if (root.size() == 0) {
@@ -225,6 +243,30 @@ void Windows::Out() {
 			system("pause");
 		}
 	}
+}
+
+void Windows::SaveAll() {
+	ofstream os("SaveData.txt");
+	char choice;
+	cout << "Save data or not ? y/n " << endl;
+	cin >> choice;
+	if (choice == 'n') {
+		return;
+	}
+	for (int i = 0; i < root.size(); i++)
+		root[i]->Save(*this, os);
+
+	os.close();
+}
+
+void Windows::DeleteAll() {
+	for (int i = 0; i < root.size(); i++)
+		root[i]->remove(*this);
+}
+
+ostream& operator << (ostream& os, const mPoint& m) {
+	cout << "< " << m._x << " , " << m._y << " >";
+	return os;
 }
 
 /*-------------------------------------------------------------------------------------------------*/
